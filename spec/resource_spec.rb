@@ -44,4 +44,39 @@ describe Resource do
       end
     end
   end
+  
+  describe "dynamic finder" do
+    before(:all) do
+      class Person < Resource ; end ; 
+      Person.define_attributes(:name, :age)
+      [["Mike", 22], ["Amy", 36], ["Jose", 49], ["Jamie", 22], ["Niko", 34], ["Stewie", 2]].each do |pair|
+        person      = Person.new
+        person.name = pair[0]
+        person.age  = pair[1]
+      end
+    end    
+    it "should find resources by attribute and value" do
+      niko = Person.find_by_name("Niko")
+      niko.name.should == "Niko"
+      niko.age.should == 34
+    end
+  end
+  
+  describe "to_xml" do
+    before(:all) do
+      class Stuff < Resource ; end ; 
+      Stuff.define_attributes(:one, :two)
+      @stuff     = Stuff.new
+      @stuff.one = "fun"
+      @stuff.two = "blue"
+    end
+    
+    it "should output valid xml" do
+      @stuff.to_xml.should =~ /^<\?xml version="1.0" encoding="UTF-8"\?>/
+    end
+    
+    it "should output the resource" do
+      @stuff.to_xml.should =~ /<Stuff>\s*<one>fun<\/one>\s*<two>blue<\/two>\s*<\/Stuff>$/
+    end
+  end
 end
