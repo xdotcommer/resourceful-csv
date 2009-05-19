@@ -24,9 +24,9 @@ class Resource
   def self.method_missing(finder, *args)
     super unless finder.to_s =~ /^find_by_(.*)/
     attribute, value = $1, args[0]
-
+    
     ObjectSpace.each_object(self) do |resource|
-      return resource if resource.send(attribute) == value
+      return resource if resource.send(attribute).to_s == value
     end
   end
   
@@ -39,8 +39,9 @@ class Resource
 private
   def attribute_xml
     xml = ""
-    self.attributes.each do |attribute|
-      xml << "\t<#{attribute}>#{self.send(attribute, self.send(attribute))}</#{attribute}>\n"
+    instance_variables.each do |attribute|
+      tag = attribute.gsub(/^@/, '')
+      xml << "\t<#{tag}>#{instance_variable_get(attribute)}</#{tag}>\n"
     end
     xml
   end

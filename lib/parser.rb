@@ -3,6 +3,7 @@ require File.join(File.dirname(__FILE__), 'resource')
 require File.join(File.dirname(__FILE__), 'array')
 
 class Parser
+  DATA = []
   attr_reader :csv_files
   
   def self.load
@@ -38,12 +39,12 @@ class Parser
         attributes.zip(row.symbolize).each do |attribute, value|
           object.send("#{attribute}=", value)
         end
+        DATA << object
       end
     end
   end
-
+  
 private
-
   def create_model(model_name)
     model_name = model_name.capitalize
     return false if Object.const_defined?(model_name)

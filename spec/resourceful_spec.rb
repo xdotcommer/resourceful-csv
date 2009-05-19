@@ -15,8 +15,14 @@ describe 'The Resourceful App' do
   end
   
   it "finds resources based on attribute / value" do
-    get '/dog/breed/datsun'
+    get '/dog/breed/bulldog'
     response.should be_ok
-    response.body.should =~ /All dogs with a breed of datsun/
+    response.content_type.should == 'text/xml'
+    response.body.should =~ /^<\?xml version="1\.0" encoding="UTF-8"\?>\s*<Dog>/
+    response.body.should =~ /<age>4<\/age>/
+    response.body.should =~ /<color>white<\/color>/
+    response.body.should =~ /<breed>bulldog<\/breed>/
+    response.body.should =~ /<name>Fido<\/name>/
+    response.body.should =~ /<\/Dog>\s*$/
   end
 end
