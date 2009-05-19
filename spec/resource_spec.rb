@@ -72,11 +72,13 @@ describe Resource do
     end
     
     it "should output valid xml" do
-      @stuff.to_xml.should =~ /^<\?xml version="1.0" encoding="UTF-8"\?>/
+      @stuff.to_xml.should =~ /^<\?xml version="1.0" encoding="UTF-8"\?>\s*<Stuff>/
     end
     
     it "should output the resource" do
-      @stuff.to_xml.should =~ /<Stuff>\s*<one>fun<\/one>\s*<two>blue<\/two>\s*<\/Stuff>$/
+      @stuff.to_xml.should =~ /<two>blue<\/two>/
+      @stuff.to_xml.should =~ /<one>\s*fun\s*<\/one>/
+      @stuff.to_xml.should =~ /<\/Stuff>\s*$/
     end
   end
 end

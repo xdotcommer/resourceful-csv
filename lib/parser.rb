@@ -36,7 +36,7 @@ class Parser
         end
       else
         object = Object.const_get(model_name.capitalize).new
-        attributes.zip(row.symbolize).each do |attribute, value|
+        attributes.zip(row).each do |attribute, value|
           object.send("#{attribute}=", value)
         end
         DATA << object
